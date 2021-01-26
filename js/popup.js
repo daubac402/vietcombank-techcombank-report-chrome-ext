@@ -1,0 +1,3 @@
+$(function() {
+    $("#report").html("abc");
+});
