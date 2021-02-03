@@ -13,12 +13,18 @@ function runFunction() {
 						   <h1>Quick Report</h1>
 						   <button class='js-copy-to-clipboard'">Copy to Clipboard</button>
 						   <p>`;
+	var $target = $("#ChiTietTaiKhoan > div > div > div.box.no-p");
+
 	$("#toanbo > div > div").each(function () {
 		let $this = $(this);
+		let transferContent = $this.find("div > div:nth-child(1) > div:nth-child(2)").html();
 		let money = $this.find("div > div:nth-child(2) > div:nth-child(2)").html();
-		if (money && !money.includes("-")) {
+
+		if (
+			money && !money.includes("-")
+		) {
 			reportMain += $this.find("div > div:nth-child(1) > div:nth-child(1)").html() + "<br>";
-			reportMain += $this.find("div > div:nth-child(1) > div:nth-child(2)").html() + "<br>";
+			reportMain += transferContent + "<br>";
 			reportMain += money + "<br>";
 			reportMain += "<br>";
 		}
@@ -26,20 +32,21 @@ function runFunction() {
 	reportMain += "</p></div>";
 
 	if (!lastReportDom) {
-		if ($("#ChiTietTaiKhoan > div > div > div.box.no-p").length > 0) {
-			$("#ChiTietTaiKhoan > div > div > div.box.no-p").before(reportMain);
+		if ($target.length > 0) {
+			$target.before(reportMain);
 			lastReportDom = reportMain;
 		}
 	} else {
 		if (lastReportDom != reportMain) {
 			$("div.js-quick-report").remove();
-			$("#ChiTietTaiKhoan > div > div > div.box.no-p").before(reportMain);
+			$target.before(reportMain);
 			lastReportDom = reportMain;
 		}
 	}
 }
 setInterval(runFunction, 500);
 
-$(document).on("click", ".js-copy-to-clipboard", function() {
+$(document).on("click", ".js-copy-to-clipboard", function(e) {
+	e.preventDefault();
 	jsCopyToClipboard("div.js-quick-report p");
 });
